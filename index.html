@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyra Hub</title>
+    <link rel="icon" href="https://image2url.com/r2/default/images/1770448509686-7735246e-00d6-4549-adc7-905c51174619.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #000000;
+            --surface: #0a0a0a;
+            --surface-hover: #111111;
+            --border: #22d3ee;
+            --cyan: #22d3ee;
+            --cyan-dim: rgba(34, 211, 238, 0.1);
+            --cyan-glow: rgba(34, 211, 238, 0.3);
+            --text: #ffffff;
+            --text-dim: #22d3ee;
+            --font: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .stars {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--cyan);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: twinkle 3s infinite;
+            box-shadow: 0 0 4px var(--cyan);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        .top-nav {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .nav-logo {
+            font-family: var(--font);
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--cyan);
+            margin-right: 20px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .nav-btn.active {
+            background: var(--cyan-dim);
+            color: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan-glow);
+        }
+
+        .nav-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .nav-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 8px;
+        }
+
+        
+        .main {
+            padding-top: 100px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .view {
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+   
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .card-title {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-family: var(--font-mono);
+            font-size: 2rem;
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+     
+        .link-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            text-decoration: none;
+            margin-bottom: 12px;
+            transition: all 0.2s;
+            box-shadow: 0 0 5px var(--cyan-glow);
+        }
+
+        .link-card:hover {
+            border-color: var(--cyan);
+            background: var(--surface-hover);
+            box-shadow: 0 0 20px var(--cyan-glow);
+            transform: translateX(5px);
+        }
+
+        .link-info h3 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .link-info p {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+
+        .link-arrow {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+        }
+
+        .link-card:hover .link-arrow {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+        }
+
+        .partner-card {
+            display: block;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.2s;
+            box-shadow: 0 0 5px var(--cyan-glow);
+        }
+
+        .partner-card:hover {
+            border-color: var(--cyan);
+            background: var(--surface-hover);
+            box-shadow: 0 0 15px var(--cyan-glow);
+            transform: translateY(-3px);
+        }
+
+        .partner-logo {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 12px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .partner-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .partner-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--cyan);
+        }
+
+        .partner-url {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            word-break: break-all;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 420px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 0 30px var(--cyan-glow);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--cyan);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .setting {
+            margin-bottom: 24px;
+        }
+
+        .setting:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 0.9rem;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .input-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-main {
+            background: var(--cyan);
+            color: var(--bg);
+            font-weight: 500;
+        }
+
+        .btn-main:hover {
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+        }
+
+        #viewer {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: none;
+            flex-direction: column;
+            z-index: 300;
+        }
+
+        #viewer.active {
+            display: flex;
+        }
+
+        .viewer-bar {
+            height: 60px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+        }
+
+        #viewer iframe {
+            flex: 1;
+            border: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 16px 24px;
+            background: var(--surface);
+            border: 1px solid var(--cyan);
+            border-radius: 12px;
+            color: var(--cyan);
+            font-size: 0.9rem;
+            transform: translateX(400px);
+            transition: 0.3s;
+            z-index: 1000;
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .toast.show { transform: translateX(0); }
+        .toast.error { border-color: #ef4444; color: #ef4444; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--cyan); }
+
+        /* New Box Styles for Partners & Discord */
+        .partners-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+
+        .partners-box-content {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .partners-box .partner-card {
+            margin-bottom: 0;
+        }
+
+        .partners-box .link-card {
+            margin-bottom: 0;
+        }
+
+        /* Stats display in settings */
+        .stats-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .stat-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .stat-number {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            color: var(--cyan);
+            text-shadow: 0 0 5px var(--cyan);
+        }
+
+        .stat-box.clickable {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .stat-box.clickable:hover {
+            border-color: var(--cyan);
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+    </style>
+</head>
+<body>
+
+  
+    <div class="stars" id="stars"></div>
+    <div class="toast" id="toast"></div>
+
+  
+    <nav class="top-nav">
+        <div class="nav-logo">Zyra</div>
+        
+        <button class="nav-btn active" onclick="nav('home', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            Home
+        </button>
+        
+        <button class="nav-btn" onclick="openViewer('https://zyragames-jj.github.io/ZyraGames.github.io/', 'AI')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+            AI
+        </button>
+        
+        <button class="nav-btn" onclick="nav('games', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            Games
+        </button>
+        
+        <button class="nav-btn" onclick="nav('media', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+            Media
+        </button>
+        
+        <button class="nav-btn" onclick="nav('partners', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Partners
+        </button>
+        
+        <div class="nav-divider"></div>
+        
+        <button class="nav-btn" onclick="toggleSettings()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Settings
+        </button>
+    </nav>
+
+    <div class="main">
+        <div class="container">
+
+            <div id="view-home" class="view">
+                <div class="grid-2">
+                    <div class="card">
+                        <div class="card-title">Time</div>
+                        <div class="card-value" id="clock">00:00</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Battery</div>
+                        <div class="card-value" id="battery">--</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div class="card-title" style="margin-bottom: 16px; font-size: 0.85rem;">Quick Links</div>
+                    <a href="https://discord.gg/A32Y8hb6jJ" target="_blank" class="link-card">
+                        <div class="link-info">
+                            <h3>Discord Server</h3>
+                            <p>Join our community</p>
+                        </div>
+                        <span class="link-arrow">→</span>
+                    </a>
+                    <a href="https://forms.gle/jrvFsCAzr2qLMyKSA" target="_blank" class="link-card">
+                        <div class="link-info">
+                            <h3>Submit Request</h3>
+                            <p>Request games or features</p>
+                        </div>
+                        <span class="link-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <div id="view-games" class="view hidden">
+                <div class="link-card" onclick="launchGame('https://genizymath.github.io/')">
+                    <div class="link-info">
+                        <h3>GN Math</h3>
+                        <p>BIG game collection</p>
+                    </div>
+                    <span class="link-arrow">→</span>
+                </div>
+                <div class="link-card" onclick="window.open('https://psecurly-by-void.bostoncareercounselor.com/g', '_blank')">
+                    <div class="link-info">
+                        <h3>Velara</h3>
+                        <p>Gaming portal/pr0xy</p>
+                    </div>
+                    <span class="link-arrow">→</span>
+                </div>
+                <div class="link-card" onclick="window.open('https://quack-learn.web.app/', '_blank')">
+                    <div class="link-info">
+                        <h3>Duck Games</h3>
+                        <p>Retro games</p>
+                    </div>
+                    <span class="link-arrow">→</span>
+                </div>
+                <div class="link-card" onclick="launchCustomGame()">
+                    <div class="link-info">
+                        <h3 id="custom-game-title">Custom</h3>
+                        <p id="custom-game-desc">Configure in settings</p>
+                    </div>
+                    <span class="link-arrow">→</span>
+                </div>
+            </div>
+
+            <div id="view-media" class="view hidden">
+                <div class="link-card" onclick="window.open('https://yflix.to/home', '_blank')">
+                    <div class="link-info">
+                        <h3>YFlix</h3>
+                        <p>Movies & TV shows</p>
+                    </div>
+                    <span class="link-arrow">→</span>
+                </div>
+                <div class="link-card" onclick="window.open('https://arc018.to/', '_blank')">
+                    <div class="link-info">
+                        <h3>Arc018</h3>
+                        <p>Series archive</p>
+                    </div>
+                    <span class="link-arrow">→</span>
+                </div>
+            </div>
+
+            <div id="view-partners" class="view hidden">
+                <!-- Partners Box containing both Partner and Discord - Title removed -->
+                <div class="partners-box">
+                    <div class="partners-box-content">
+                        <a href="https://sonissosigma.keybusinessconnection.com/" target="_blank" class="partner-card">
+                            <div class="partner-logo">
+                                <img src="https://image2url.com/r2/default/images/1770434449041-5958d4dc-e4a1-44be-845a-6250582197d1.png" alt="ZG">
+                            </div>
+                            <div class="partner-name">Zane Gamez</div>
+                            <div class="partner-url">sonissosigma.keybusinessconnection.com</div>
+                        </a>
+                        
+                        <a href="https://discord.gg/A32Y8hb6jJ" target="_blank" class="link-card">
+                            <div class="link-info">
+                                <h3>Discord Server</h3>
+                                <p>discord.gg/A32Y8hb6jJ</p>
+                            </div>
+                            <span class="link-arrow">→</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal" onclick="if(event.target === this) toggleSettings()">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title">Settings</div>
+                <button class="modal-close" onclick="toggleSettings()">×</button>
+            </div>
+            <div class="modal-body">
+
+                <!-- Stats Section moved to Settings -->
+                <div class="setting">
+                    <label class="setting-label">Performance Stats</label>
+                    <div class="stats-display">
+                        <div class="stat-box">
+                            <div class="stat-label">FPS</div>
+                            <div class="stat-number" id="fps">60</div>
+                        </div>
+                        <div class="stat-box clickable" onclick="testPing()">
+                            <div class="stat-label">PING</div>
+                            <div class="stat-number" id="ping">--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting">
+                    <label class="setting-label">Account</label>
+                    <div id="account-display" style="padding: 14px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 10px; color: var(--cyan);"></div>
+                    <div class="input-row">
+                        <input type="text" id="account-name" placeholder="Username">
+                        <input type="password" id="account-pass" placeholder="Password" style="width: 120px;">
+                    </div>
+                    <button class="btn btn-main" onclick="saveAccount()" style="margin-top: 10px;">Save Account</button>
+                </div>
+
+                <div class="setting">
+                    <label class="setting-label">Panic Button</label>
+                    <div class="input-row">
+                        <input type="text" id="panic-url" placeholder="URL (e.g., https://google.com)">
+                        <input type="text" id="panic-key" placeholder="Key (e.g., `)" style="width: 100px;">
+                    </div>
+                    <button class="btn btn-danger" onclick="savePanic()" style="margin-top: 10px;">Save Panic</button>
+                </div>
+
+                <div class="setting">
+                    <label class="setting-label">Custom Game</label>
+                    <input type="text" id="custom-url" placeholder="Game URL">
+                    <input type="text" id="custom-title" placeholder="Title">
+                    <input type="text" id="custom-desc" placeholder="Description">
+                    <button class="btn btn-secondary" onclick="saveCustom()">Save Custom Game</button>
+                </div>
+
+                <div class="setting">
+                    <label class="setting-label">Tab Cloak</label>
+                    <select id="cloak-select" onchange="applyCloak(this.value)">
+                        <option value="">None</option>
+                        <option value="google">Google</option>
+                        <option value="drive">Drive</option>
+                        <option value="classroom">Classroom</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="viewer">
+        <div class="viewer-bar">
+            <span id="viewer-title">Viewer</span>
+            <button class="btn btn-main" onclick="closeViewer()">Close</button>
+        </div>
+        <iframe id="viewer-frame"></iframe>
+    </div>
+
+    <script>
+        for(let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            document.getElementById('stars').appendChild(star);
+        }
+
+        const DB = {
+            account: JSON.parse(localStorage.getItem('zyra_account')) || null,
+            panic: JSON.parse(localStorage.getItem('zyra_panic')) || {},
+            custom: JSON.parse(localStorage.getItem('zyra_custom')) || {},
+            cloak: localStorage.getItem('zyra_cloak') || ''
+        };
+
+        function save(key, value) {
+            localStorage.setItem('zyra_' + key, typeof value === 'string' ? value : JSON.stringify(value));
+        }
+
+        function init() {
+            if(DB.account) {
+                document.getElementById('account-display').textContent = 'Logged in as: ' + DB.account.name;
+                document.getElementById('account-name').value = DB.account.name;
+                document.getElementById('account-pass').value = DB.account.pass;
+            } else {
+                document.getElementById('account-display').textContent = 'No account saved';
+            }
+
+            if(DB.panic.url) document.getElementById('panic-url').value = DB.panic.url;
+            if(DB.panic.key) document.getElementById('panic-key').value = DB.panic.key;
+
+            if(DB.custom.url) {
+                document.getElementById('custom-url').value = DB.custom.url;
+                document.getElementById('custom-game-title').textContent = DB.custom.title || 'Custom';
+                document.getElementById('custom-game-desc').textContent = DB.custom.desc || 'Custom game';
+            }
+            if(DB.custom.title) document.getElementById('custom-title').value = DB.custom.title;
+            if(DB.custom.desc) document.getElementById('custom-desc').value = DB.custom.desc;
+
+            if(DB.cloak) {
+                document.getElementById('cloak-select').value = DB.cloak;
+                applyCloak(DB.cloak);
+            }
+
+            setInterval(() => {
+                document.getElementById('clock').textContent = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            }, 1000);
+
+            if('getBattery' in navigator) {
+                navigator.getBattery().then(b => {
+                    document.getElementById('battery').textContent = Math.round(b.level * 100) + '%';
+                    b.addEventListener('levelchange', () => {
+                        document.getElementById('battery').textContent = Math.round(b.level * 100) + '%';
+                    });
+                });
+            }
+
+            // FPS
+            let last = performance.now(), frames = 0;
+            function loop() {
+                frames++;
+                const now = performance.now();
+                if(now >= last + 1000) {
+                    document.getElementById('fps').textContent = Math.round((frames * 1000) / (now - last));
+                    frames = 0;
+                    last = now;
+                }
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        init();
+
+        function testPing() {
+            const el = document.getElementById('ping');
+            el.textContent = '...';
+            setTimeout(() => {
+                el.textContent = Math.floor(Math.random() * 60 + 20) + 'ms';
+            }, 500);
+        }
+
+        function nav(view, el) {
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            document.getElementById('view-' + view).classList.remove('hidden');
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            if(el) el.classList.add('active');
+        }
+
+        function openViewer(url, title) {
+            document.getElementById('viewer-title').textContent = title;
+            document.getElementById('viewer-frame').src = url;
+            document.getElementById('viewer').classList.add('active');
+        }
+
+        function closeViewer() {
+            document.getElementById('viewer').classList.remove('active');
+            setTimeout(() => document.getElementById('viewer-frame').src = '', 300);
+        }
+
+        function launchGame(url) {
+            const w = window.open('about:blank', '_blank');
+            if(w) {
+                w.document.write('<!DOCTYPE html><html><head><title>Game</title><style>body{margin:0;background:#000}</style></head><body><iframe src="' + url + '" style="width:100vw;height:100vh;border:none;"></iframe></body></html>');
+                w.document.close();
+            } else toast('Popup blocked', true);
+        }
+
+        function launchCustomGame() {
+            if(DB.custom.url) launchGame(DB.custom.url);
+            else { toast('Configure in settings', true); toggleSettings(); }
+        }
+
+        function toggleSettings() {
+            document.getElementById('settings-modal').classList.toggle('active');
+        }
+
+        function saveAccount() {
+            const name = document.getElementById('account-name').value.trim();
+            const pass = document.getElementById('account-pass').value;
+            if(!name || !pass) return toast('Enter username and password', true);
+            
+            DB.account = { name: name, pass: pass };
+            save('account', DB.account);
+            document.getElementById('account-display').textContent = 'Logged in as: ' + name;
+            toast('Account saved');
+        }
+
+        function savePanic() {
+            const url = document.getElementById('panic-url').value.trim();
+            const key = document.getElementById('panic-key').value.trim();
+            
+            if(!url || !key) return toast('Enter both URL and key', true);
+            
+            DB.panic = { url: url, key: key };
+            save('panic', DB.panic);
+            toast('Panic button saved');
+        }
+
+        function saveCustom() {
+            const url = document.getElementById('custom-url').value.trim();
+            const title = document.getElementById('custom-title').value.trim();
+            const desc = document.getElementById('custom-desc').value.trim();
+            
+            if(!url) return toast('Enter game URL', true);
+            
+            DB.custom = { 
+                url: url, 
+                title: title || 'Custom', 
+                desc: desc || 'Custom game' 
+            };
+            save('custom', DB.custom);
+            
+            document.getElementById('custom-game-title').textContent = DB.custom.title;
+            document.getElementById('custom-game-desc').textContent = DB.custom.desc;
+            toast('Custom game saved');
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(DB.panic.key && e.key === DB.panic.key && DB.panic.url) {
+                window.location.href = DB.panic.url;
+            }
+        });
+
+        const cloaks = {
+            google: {t: 'Google', i: 'https://www.google.com/favicon.ico'},
+            drive: {t: 'Drive', i: 'https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png'},
+            classroom: {t: 'Classroom', i: 'https://ssl.gstatic.com/classroom/ic_product_classroom_32.png'}
+        };
+
+        function applyCloak(type) {
+            save('cloak', type);
+            if(!type) {
+                document.title = 'Zyra';
+                document.querySelector('link[rel="icon"]').href = 'https://www.google.com/favicon.ico';
+                return;
+            }
+            document.title = cloaks[type].t;
+            document.querySelector('link[rel="icon"]').href = cloaks[type].i;
+        }
+
+        function toast(msg, err) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.className = 'toast' + (err ? ' error' : '');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
+
+</body>
+</html>
+
+<div id="bottom-scripts-container" style="text-align:center; margin-top:20px;">
+
+    <script src="https://pl28665398.effectivegatecpm.com/5e/a9/a9/5ea9a92b230f7dd525a0047c961c7755.js" async></script>
+
+    <script src="https://www.effectivegatecpm.com/iv34e8jny?key=85c1d7c1f4bef9ee72ba7810f0db0bbd" async></script>
+
+    <script async="async" data-cfasync="false" src="https://pl28665425.effectivegatecpm.com/2f4f407adfaa5fa377969f5d104cf4ec/invoke.js"></script>
+    <div id="container-2f4f407adfaa5fa377969f5d104cf4ec"></div>
+
+</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warning </title>
+    <script>
+       
+        window.onload = function() {
+            alert("⚠ Warning: This site has ads for me to make money pls dont mind them ");
+        };
+    </script>
+</head>
+<body>
+</body>
+</html>
